@@ -1,0 +1,11 @@
+{
+  "name": "devopspractice",
+  "version": "1.0.0",
+  "description": "Node.js app for DevOps practice",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "DevOps Learner",
+  "license": "MIT"
+}
