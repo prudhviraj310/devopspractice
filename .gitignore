@@ -1,6 +1,10 @@
-﻿# Terraform
+﻿# Terraform directories and files
 .terraform/
 *.tfstate
-*.tfstate.*
+*.tfstate.backup
 *.tfvars
-*.tfplan
+.terraform.lock.hcl
+
+# OS files
+.DS_Store
+Thumbs.db
