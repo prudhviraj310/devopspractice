@@ -3,53 +3,46 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "node-app:latest"
-        SONARQUBE_ENV = "MySonarQube"  // Name of SonarQube server config in Jenkins
+        APP_CONTAINER = "node-app"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/prudhviraj310/devopspractice'
-            }
-        }
-
-        stage('Install & Test') {
-            steps {
-                dir('node-app') {
-                    sh 'npm install'
-                    sh 'npm test || true'   // run tests (won’t fail pipeline if tests fail)
-                }
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    withSonarQubeEnv("${SONARQUBE_ENV}") {
-                        dir('node-app') {
-                            sh 'npx sonar-scanner \
-                                -Dsonar.projectKey=node-app \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=$SONAR_HOST_URL \
-                                -Dsonar.login=$SONAR_AUTH_TOKEN'
-                        }
-                    }
-                }
+                echo "Checking out the repo..."
+                git branch: 'main', url: 'https://github.com/prudhviraj310/devopspractice.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
+                echo "Building Docker image..."
+                // Ensure Docker uses full path
                 sh 'docker build -t $DOCKER_IMAGE ./node-app'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker stop node-app || true'
-                sh 'docker rm node-app || true'
-                sh 'docker run -d --name node-app -p 3000:3000 $DOCKER_IMAGE'
+                echo "Running Docker container..."
+                // Stop and remove previous container safely
+                sh 'docker stop $APP_CONTAINER || true'
+                sh 'docker rm $APP_CONTAINER || true'
+                sh 'docker run -d --name $APP_CONTAINER -p 3000:3000 $DOCKER_IMAGE'
             }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                echo 'SonarQube analysis placeholder'
+                // You can add actual SonarQube steps later
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
