@@ -12,7 +12,7 @@ variable "aws_profile" {
 # Key Pair
 variable "key_name" {
   description = "Name of the existing AWS key pair to access EC2 instances"
-  default     = "replatforming"
+  default     = "prudhviraj"
 }
 
 # VPC and Networking
